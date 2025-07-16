@@ -1,0 +1,42 @@
+name: CS Script / Build
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+
+    runs-on: windows-2022
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build CS Script
+        run: |
+          build.cmd
+        working-directory: ${{ github.workspace }}\Source\Build
+        shell: cmd
+
+      - name: Upload Artifact / Build Log
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: CS Script Build Log
+          path: |
+            ${{ github.workspace }}\Source\Build\build.log
+          retention-days: 10
+
+      - name: Upload Artifact / Library
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: CS Script Library
+          path: |
+            ${{ github.workspace }}\Source\Build\CSScriptLibrary.*
