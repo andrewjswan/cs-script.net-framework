@@ -36,16 +36,16 @@ if exist build.log del build.log
 REM ECHO Building...
 
 cd ..\CSScriptLibrary
-
 ECHO Building CSScript TargetFramework: v4.7.2:
+
 ECHO Building cscs.exe: >> ..\Build\build.log
 "%net45_tools%\msbuild.exe" ..\cscscript\cscscript.csproj /p:AssemblyName=cscs /p:TargetFrameworkVersion=v4.7.2  /p:configuration=Release;Platform="AnyCPU" /p:OutDir=bin\Distro /p:DefineConstants="net4;net45" %common_msbuild_params%
 echo "%net45_tools%\msbuild.exe" ..\cscscript\cscscript.csproj /p:AssemblyName=cscs /p:TargetFrameworkVersion=v4.7.2  /p:configuration=Release;Platform="AnyCPU" /p:OutDir=bin\Distro /p:DefineConstants="net4;net45" %common_msbuild_params% 
-ECHO ------------ >> ..\Build\build.log
-rem goto exit
 move ..\cscscript\bin\Distro\cscs.exe ..\Build\cscs.exe
 ..\Build\cscs.exe -? > "%local_dev%\help.txt"
 ..\Build\cscs.exe -? > ..\..\..\cs-script\help.txt
+ECHO ------------ >> ..\Build\build.log
+
 ECHO Building cscs32.exe: >> ..\Build\build.log
 "%net45_tools%\msbuild.exe" ..\cscscript\cscscript.csproj /p:AssemblyName=cscs /p:TargetFrameworkVersion=v4.7.2  /p:PlatformTarget=x86 /p:configuration=Release;Platform="AnyCPU" /p:OutDir=bin\Distro /p:DefineConstants="net4;net45" %common_msbuild_params%
 move ..\cscscript\bin\Distro\cscs.exe ..\Build\cscs32.exe
@@ -63,14 +63,14 @@ ECHO ------------ >> ..\Build\build.log
 
 ECHO Building CSScriptLibrary.dll (unsigned): >> ..\Build\build.log
 "%net45_tools%\msbuild.exe" ..\CSScriptLibrary\CSScriptLibrary.csproj /p:AssemblyName=CSScriptLibrary /p:TargetFrameworkVersion=v4.7.2  /p:configuration=Release;Platform="AnyCPU" /p:OutDir=bin\Distro /p:DefineConstants="net4;net45;InterfaceAssembly;CSSLib_BuildUnsigned" %common_msbuild_params%
-ECHO ------------ >> ..\Build\build.log
 move ..\CSScriptLibrary\bin\Distro\CSScriptLibrary.dll ..\Build\CSScriptLibrary.dll.unsigned
+ECHO ------------ >> ..\Build\build.log
 
 ECHO Building CSScriptLibrary.dll: >> ..\Build\build.log
 "%net45_tools%\msbuild.exe" ..\CSScriptLibrary\CSScriptLibrary.csproj /p:AssemblyName=CSScriptLibrary /p:TargetFrameworkVersion=v4.7.2  /p:configuration=Release;Platform="AnyCPU" /p:OutDir=bin\Distro /p:DefineConstants="net4;net45;InterfaceAssembly" /t:Rebuild  %common_msbuild_params%
-ECHO ------------ >> ..\Build\build.log
 move ..\CSScriptLibrary\bin\Distro\CSScriptLibrary.dll ..\Build\CSScriptLibrary.dll
 move ..\CSScriptLibrary\bin\Distro\CSScriptLibrary.xml ..\Build\CSScriptLibrary.xml
+ECHO ------------ >> ..\Build\build.log
 
 ECHO Building css_config:
 ECHO Building css_config: >> ..\Build\build.log
@@ -104,16 +104,4 @@ ECHO Building runasm32.exe: >> ..\Build\build.log
 "%net4_tools%\csc.exe" /nologo  /o /platform:x86 /out:runasm32.exe /t:exe ..\runasm32.cs /r:System.dll >> build.log
 ECHO ------------ >> ..\Build\build.log
 
-rem pause to allow all apps (ant-viruses, compilers) exit and release the temp files
-ping 1.1.1.1 -n 1 -w 2000 > nul
-
-ECHO Cleaning up...
-del  sgKey.snk
-del /S /Q temp\*
-RD temp\temp
-RD temp
-
-notepad build.log
-del build.log
 :exit
-
