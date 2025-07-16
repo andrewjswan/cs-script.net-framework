@@ -3,8 +3,9 @@ echo off
 @set oldPATH=%PATH%;
 @set PATH=%windir%\Microsoft.NET\Framework\v1.1.4322;%PATH%;
 @set net4_tools=C:\Windows\Microsoft.NET\Framework\v4.0.30319
-@set vs_edition=Community
+rem @set vs_edition=Community
 rem @set vs_edition=Professional
+@set vs_edition=Enterprise
 
 @set net45_tools=C:\Program Files\Microsoft Visual Studio\2022\%vs_edition%\MSBuild\Current\Bin
 
