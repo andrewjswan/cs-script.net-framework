@@ -1521,7 +1521,13 @@ namespace csscript
 
                         if (!File.Exists(location) || location.Contains("mscorlib"))
                             continue;
-
+                        
+                        // Do not add dynamically generated assemblies to the reference library to avoid AssemblyName conflicts.
+                        if (asm.FullName.Contains(".tmp"))
+                        {
+                            continue;
+                        }
+                        
                         requestedRefAsms.AddAssembly(location);
                     }
                     catch
